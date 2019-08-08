@@ -103,7 +103,7 @@ def get_submit_data(title_list,answer_list):
 
 def Auto_WjX():
 	'''页面请求'''
-	fill_url = 'https://www.wjx.cn/jq/43178556.aspx'
+	fill_url = ''
 	fill_content,cookies = get_fill_content(fill_url)#网页源代码，cookies
 	title_list = get_title_list(fill_content) #所有题目
 	
