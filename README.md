@@ -15,18 +15,11 @@
 - random
 - time
 
-## 项目思路
-参考项目:
+
+## 参考项目:
 - [简书：Python填写问卷星 作者：feifeifeikkk]( https://www.jianshu.com/p/34961ceedcb4)
 - [Python笔记（六）--Python3通过post方法实现自动提交问卷星调查问卷](http://www.pianshen.com/article/6056350400/)
 - [蜻蜓HTTP](https://www.qingtingip.com/h_210979.html)
 - [WJXAutoSubmit](https://github.com/huanxyx/WJXAutoSubmit )
 
 
-首先对提交后的网页进行分析
-
-![](https://github.com/NormanBB/WJX_Autosubmit/blob/master/1.jpg)
-> 问卷星提交数据的url
-
-![](https://github.com/NormanBB/WJX_Autosubmit/blob/master/2.jpg)
-> 问卷星提交的参数
