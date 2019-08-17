@@ -22,4 +22,9 @@
 - [蜻蜓HTTP](https://www.qingtingip.com/h_210979.html)
 - [WJXAutoSubmit](https://github.com/huanxyx/WJXAutoSubmit )
 
+## Bugs
+
+目前脚本仅支持固定问题的问卷，并不支持问题动态变化的问卷。
+
+欢迎对不同种类问卷进行适配并提交pull request.
 
