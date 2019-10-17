@@ -28,3 +28,6 @@
 
 欢迎对不同种类问卷进行适配并提交pull request.
 
+以下为一个适配了多种题目类型的项目，需要可以看看。
+
+[问卷星项目](https://github.com/huanxyx/WJXAutoSubmit ) 
