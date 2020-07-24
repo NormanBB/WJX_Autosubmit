@@ -10,10 +10,7 @@
 - [bs4](https://beautifulsoup.readthedocs.io/zh_CN/v4.4.0/#id8)
 - [fake-useragent](https://pypi.org/project/fake-useragent/)
 
-以下为所需要的Python标准库，不需要另外安装
-- re
-- random
-- time
+
 
 
 ## 参考项目:
