@@ -3,40 +3,16 @@ from bs4 import BeautifulSoup
 import re
 import random
 import time
-from fake_useragent import UserAgent
 from collections import OrderedDict
-
-'''伪造提交ip'''
-
-#访问西刺代理,获取代理地址池，西刺代理将ip地址放在网页td标签中，读取所有td标签，并切片，获取ip地址
-def Get_POOLS():
-	headers = {'User-Agent': UserAgent().random}
-	html = requests.get(url='https://www.xicidaili.com/nn/', headers=headers)
-	#以下为细节说明，来源于re官方文档
-	#正则匹配（在带有 'r' 前缀的字符串字面值中，反斜杠不必做任何特殊处理。）
-	#(...)（组合），匹配括号内的任意正则表达式，并标识出组合的开始和结尾。
-	pools = re.findall(r'<td>(.+?)</td>', html.text)[0:499:5]
-	return pools
-
-#从代理池中提取地址用于构造headers提交数据伪造提交ip
-def Get_Headers(pools):
-	Random_IP = random.choice(pools)
-	headers = {	 
-		'User-Agent':UserAgent().random,
-		'X-Forwarded-For':Random_IP,
-		}
-	return headers
 
 
 '''调查页面，获取相关参数'''
 # 获取调查问卷的页面
 def get_fill_content(url):
-	headers = {
-	'user-agent': UserAgent().random
-	}
-	res = requests.get(url, headers=headers)#, headers=headers)
-	cookies = res.cookies
-	return res.text,cookies
+    r1 = requests.get(url)
+    setCookie = r1.headers['Set-Cookie']
+    CookieText = re.findall(r'acw_tc=.*?;', setCookie)[0] + re.findall(r'\.ASP.*?;', setCookie)[0] + re.findall(r'jac.*?;', setCookie)[0] + re.findall(r'SERVERID=.*;',setCookie)[0]
+    return r1.text,CookieText
 
 # 从页面中获取curid,rn,jqnonce,starttime,同时构造ktimes用作提交调查问卷
 def get_submit_query(content):
@@ -104,7 +80,7 @@ def get_submit_data(title_list,answer_list):
 def Auto_WjX():
 	'''页面请求'''
 	#填入所要的网页url，类似 https://www.wjx.cn/jq/xxxxxxxx.aspx
-	fill_url = ''
+	fill_url = 'https://www.wjx.cn/jq/43178556.aspx'
 	fill_content,cookies = get_fill_content(fill_url)#网页源代码，cookies
 	title_list = get_title_list(fill_content) #所有题目
 	
@@ -112,14 +88,28 @@ def Auto_WjX():
 	curid, rn, jqnonce, ktimes,starttime = get_submit_query(fill_content)
 	jqsign = get_jqsign(ktimes,jqnonce)
 	url= get_submit_url(curid,rn,jqnonce,ktimes,jqsign,starttime)
-	
+	random_ip = str(random.randint(1, 255)) + '.' + str(random.randint(1, 255)) + '.' + str(random.randint(1, 255)) + '.' + str(random.randint(1, 255))
+	headers = {
+        "Host": "www.wjx.cn",
+        "Connection": "keep-alive",
+        "Content-Length": "156",
+        "Origin": "https://www.wjx.cn",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en, zh-CN;q=0.9, zh;q=0.8",
+        "Referer": fill_url,
+        "X-Forwarded-For": random_ip,
+        "Cookie": cookies,
+    }
 	#作随机选择
 	random_data = random_choose(title_list)
 	#构造符合样式的提交数据
 	submit_data = get_submit_data(title_list,random_data)
 	data = {'submitdata':str(submit_data)}
 	# 发送请求
-	r = requests.post(url=url, data=data,headers=Get_Headers(pools),cookies = cookies,verify=False)
+	r = requests.post(url=url,headers=headers, data=data,verify=False)
 	#通过测试返回数据中表示成功与否的关键数据（’10‘or '22'）在开头,所以只需要提取返回数据中前两位元素
 	result = r.text[0:2]
 	return result
@@ -139,7 +129,6 @@ def main():
 	print('脚本运行结束，成功提交%s份调查报告' % PostNum)  # 总结提交成功的数量，并打印
 	
 if __name__ == '__main__':
-	pools = Get_POOLS()
 	main()
 	
 

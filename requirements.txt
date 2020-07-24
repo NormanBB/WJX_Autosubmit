@@ -1,0 +1,5 @@
+fake_useragent
+bs4
+lxml
+requests
+urllib3
