@@ -16,7 +16,6 @@
 ## 参考项目:
 - [简书：Python填写问卷星 作者：feifeifeikkk]( https://www.jianshu.com/p/34961ceedcb4)
 - [Python笔记（六）--Python3通过post方法实现自动提交问卷星调查问卷](http://www.pianshen.com/article/6056350400/)
-- [蜻蜓HTTP](https://www.qingtingip.com/h_210979.html)
 - [WJXAutoSubmit](https://github.com/huanxyx/WJXAutoSubmit )
 
 ## Bugs

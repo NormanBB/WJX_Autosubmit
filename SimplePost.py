@@ -7,9 +7,14 @@ import urllib3
 import re
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+'''
+作者：tignioj
+链接：https://github.com/tignioj/test_login/blob/master/wjx/SimplePost.py
+来源：Github
+'''
 
 def return_random_data():
-    data = "1$2}2$3}3$3}4$1}5$3}6$3}7$2}8$3}9$3}10$2}11$2}12$2}13$3}14$3}15$3}16$3}17$1}18$2}19$3}20$4}21$2"
+    data = "1$1}2$1}3$2}4$3}5$1}6$2}7$1|2|4}8$2|3|4|5|6|7|8|10|11}9$4}10$3}11$2}12$2}13$1}14$4}15$4|6|7"
     return data
 
 
@@ -37,7 +42,8 @@ def post_wjx(times):
     rn = re.findall(r'rndnum="(\d+\.?\d+)"', r1.text)
     # 从网页上拿到cookie
     setCookie = r1.headers['Set-Cookie']
-    getCookie = re.findall(r'acw_tc=.*?;', setCookie)[0] + re.findall(r'\.ASP.*?;', setCookie)[0] + re.findall(r'jac.*?;', setCookie)[0] + re.findall(r'SERVERID=.*;',setCookie)[0]
+    getCookie = re.findall(r'acw_tc=.*?;', setCookie)[0] + re.findall(r'\.ASP.*?;', setCookie)[0] + re.findall(r'jac.*?;', setCookie)[0]
+
     CookieText = getCookie
 
     for i in range(times):
@@ -73,7 +79,7 @@ def post_wjx(times):
             print("Request timeout error, Please checkout your Internet.", r, e)
             break
 
-        if(re.findall(r'10', r.text)):
+        if(re.findall(r'complete', r.text)):
             print("success:%-3d, %-15s, %s" % (i+1, random_ip, r.text))
         else:
             print("没有提交成功，如果网页有验证码，请删掉原答卷，复制一份新的答卷后再重试,网页返回:", r.text)
