@@ -4,14 +4,14 @@
 
 目前github上的可用版本并不多，同时个人接触较多问卷星的问卷，便萌生了用Python3的爬虫来完成问卷的想法，同时，作为学习的项目。
 
-## 项目需求
-以下为项目所需要安装的库（模块）。
-- [requests](https://2.python-requests.org//zh_CN/latest/")
-- [bs4](https://beautifulsoup.readthedocs.io/zh_CN/v4.4.0/#id8)
-- [fake-useragent](https://pypi.org/project/fake-useragent/)
+## 程序运行
 
-可使用pip进行安装。
+1. 安装依赖。
 > pip install -r requirements.txt
+
+2. 按照提示输入所需信息
+
+![](./result.png)
 
 
 ## 鸣谢:
@@ -23,7 +23,7 @@
 
 ## Bugs
 
-目前脚本仅支持固定问题的问卷，并不支持问题动态变化的问卷。
+程序仅支持固定问题的问卷，并不支持问题动态变化的问卷。
 
 欢迎对不同种类问卷进行适配并提交pull request.
 
