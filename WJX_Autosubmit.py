@@ -8,7 +8,11 @@ import datetime
 from fake_useragent import UserAgent
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
+'''
+作者：normanbb
+链接：https://github.com/NormanBB/WJX_Autosubmit
+来源：Github
+'''
 
 '''调查页面，获取相关参数'''
 # 获取调查问卷的页面
@@ -78,6 +82,7 @@ def get_submit_data(title_list,answer_list):
         form_data += str(num+1) + '$' + str(answer_list[num]) + '}'
     return form_data[:-1]
 
+#使用代理
 def get_proxy():
     return requests.get("http://118.24.52.95/get/").json()
 
@@ -119,6 +124,7 @@ def Auto_WjX():
     #作随机选择
     random_data = random_choose(title_list)
     #构造符合样式的提交数据
+    #自定义答案可以将选择与构造部分去除
     submit_data = get_submit_data(title_list,random_data)
     data = {'submitdata':str(submit_data)}
     # 发送请求
