@@ -18,7 +18,7 @@
 - [简书：Python填写问卷星]( https://www.jianshu.com/p/34961ceedcb4)
 - [Python笔记（六）--Python3通过post方法实现自动提交问卷星调查问卷](http://www.pianshen.com/article/6056350400/)
 - [WJXAutoSubmit](https://github.com/huanxyx/WJXAutoSubmit )
-- [**ProxyPool 爬虫代理IP池**](https://github.com/jhao104/proxy_pool)
+- [ProxyPool 爬虫代理IP池](https://github.com/jhao104/proxy_pool)
 - [问卷星项目](https://github.com/tignioj/test_login/tree/master/wjx) 
 
 ## Bugs
