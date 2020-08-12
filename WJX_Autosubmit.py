@@ -88,7 +88,7 @@ def get_proxy():
 
 def Auto_WjX():
     proxy = get_proxy().get("proxy")
-    user_agent=UserAgent().random
+    user_agent=UserAgent(use_cache_server=False).random
     fill_url = get_fill_url
     fill_content,cookies = get_fill_content(fill_url,proxy,user_agent)#网页源代码，cookies
     title_list = get_title_list(fill_content) #所有题目
@@ -128,7 +128,7 @@ def Auto_WjX():
     submit_data = get_submit_data(title_list,random_data)
     data = {'submitdata':str(submit_data)}
     # 发送请求
-    r = requests.post(url=url,headers=headers, data=data, params=FormData,proxies={"http": "http://{}".format(proxy)},verify=False)
+    r = requests.post(url=url,headers=headers, data=data, params=FormData,proxies={"https": "https://{}".format(proxy)},verify=False)
     #通过测试返回数据中表示成功与否的关键数据（’10‘or '22'）在开头,所以只需要提取返回数据中前两位元素
     result = r.text[0:2]
     return result
