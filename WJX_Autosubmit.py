@@ -1,10 +1,14 @@
+import sys
+import getopt
+from fake_useragent import UserAgent
+from fake_useragent import errors
 import requests
 from bs4 import BeautifulSoup
 import re
 import random
 import time
-from collections import OrderedDict
 import datetime
+import os
 import fake_info
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -86,8 +90,11 @@ def get_submit_data(title_list,answer_list):
     return form_data[:-1]
 
 def Auto_WjX():
-    proxy = fake_info.get_proxy()
-    user_agent = fake_info.get_agent()
+    try:
+        user_agent = UserAgent().random
+    except errors.FakeUserAgentError:
+        user_agent = proxy.get_agent()
+    ip = proxy.choose_proxy(reuse,filename)
     fill_content,cookies = get_fill_content(fill_url,user_agent,proxy)#网页源代码，cookies
     title_list = get_title_list(fill_content) #所有题目
     '''获取相关参数'''
@@ -109,7 +116,7 @@ def Auto_WjX():
     url = 'https://www.wjx.cn/joinnew/processjq.ashx'
     headers = {
         "Host": "www.wjx.cn",
-        "Connection": "keep-alive",
+        "Connection": "close",
         "User-Agent": user_agent,
         "Content-Type": "application/x-www-form-urlencoded",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -125,7 +132,7 @@ def Auto_WjX():
     submit_data = get_submit_data(title_list,random_data)
     data = {'submitdata':str(submit_data)}
     # 发送请求
-    r = requests.post(url=url,headers=headers, data=data, params=FormData,proxies={"https": "https://{}".format(proxy)},verify=False)
+    r = requests.post(url=url,headers=headers, data=data, params=FormData,proxies={"https": ip},verify=False,timeout=8)
     #通过测试返回数据中表示成功与否的关键数据（’10‘or '22'）在开头,所以只需要提取返回数据中前两位元素
     result = r.text[0:2]
     return result
@@ -147,13 +154,13 @@ def main(times):
                 print('[ Response : %s ]  ===> 提交失败！！！！' % result)	
         except requests.exceptions.ProxyError:
             print('代理不可用，跳过') 
-            pass
+            continue
         except ValueError:
             print('服务器返回非正常响应，跳过') 
-            pass
-        #except requests.exceptions.ConnectionError:
-        #    print('跳过')
-        #    pass
+            continue
+        except requests.exceptions.ConnectTimeout:
+            print('代理不可用，跳过')
+            continue
     print('程序运行结束，成功提交%s份调查报告' % PostNum)  # 总结提交成功的数量，并打印
         
 if __name__ == '__main__':
@@ -162,6 +169,27 @@ if __name__ == '__main__':
     """)
     fill_url = input('输入问卷地址:')
     times = input('输入提交次数:')
+    proxy = fake_info.proxy()
+    opts, args = getopt.getopt(sys.argv[1:], '-c-f-r', ['china', 'foreign','reuse'])
+    reuse=False
+    for opt_name, opt_value in opts:
+        if opt_name in ('-c', '--china'):
+            filename = 'proxy_raw_cn.list'
+            if  os.path.exists(filename):
+                proxy.validate_proxy(filename)
+            else:
+                proxy.get_proxy()
+                proxy.validate_proxy(filename)
+        elif opt_name  in ('-f', '--foreign'):
+            filename = 'proxy_raw.list'
+            proxy.validate_proxy(filename)
+        elif opt_name in ('-r', '--reuse'):
+            reuse=True
+            reuse_choice = input('Reuse proxy_raw_cn_good.list?(Y/N)')
+            if reuse_choice == 'Y' or 'y':
+                filename = 'proxy_raw_cn_good.list'
+            elif reuse_choice == 'N' or 'n':
+                filename = 'proxy_raw_good.list'
     main(times)
     
 
