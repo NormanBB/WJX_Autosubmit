@@ -1,55 +1,64 @@
+import check
+import time
+import threading
+import random
+from multiprocessing import Pool
+import time
 import requests
 import urllib3
-import time
-import random
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 
 class proxy():
     def __init__(self):
         self.good_proxy = []
         self.filename=''
 
-    def get_proxy(self):
-        response = requests.get("http://118.24.52.95/get_all")
-        response_list = eval(response.text)
-        print(f'已获取{len(response_list)}个国内代理')
-        with open('./proxy_raw_cn.list', 'w+') as file:
-            for i in response_list:
-                file.write(i.get('proxy'))
-                file.write('\n')
+    def get_proxy(self,origin):
+        if origin == 'pool':
+            url = "http://118.24.52.95/get_all"
+            response = requests.get(url)
+            response_list = eval(response.text)
+            with open('./proxy_pool.list', 'w+') as file:
+                for i in response_list:
+                    file.write(i.get('proxy'))
+                    file.write('\n')
+        else :
+            url = 'https://www.proxy-list.download/api/v1/get?type=https'
+            response = requests.get(url)
+            with open('proxy_list.list', 'w') as f:
+                f.write(response.text)
 
     def validate_proxy(self,filename):
+        self.filename = filename
         with open(filename, 'r') as file:
             file_content = file.readlines()
             file_list = [i.rstrip("\n") for i in file_content]
-        good_proxy_num = 0
-        print(r'开始验证代理，需要一段时间，请稍等')
-        for ip in file_list:
-            try:
-                url = 'https://httpbin.org/get?show_env=1'
-                requests.get(url, proxies={"https": ip},verify=False, timeout=8)
-                good_proxy_num += 1
-                self.good_proxy.append(ip)
-                time.sleep(1)
-            except requests.exceptions.ConnectionError:
-                continue
-            except Exception:
-                continue
-        print(f'可用代理数量:{good_proxy_num}')
-        with open(filename[0:-5] + '_good.list', 'w+') as file:
-            for i in self.good_proxy:
-                file.write(i + '\n')
-            
+            file_list = list(set(file_list))
+        try:
+            file_list.remove('')
+        except:
+            pass
+        startTime = time.time()
+        pool = Pool(5)
+        self.list_part = [file_list[i:i+20] for i in range(0, len(file_list), 20)]
+        print(r'开始验证代理')
+        for i in range((len(file_list)//20) + 1):
+            pool.apply_async(self.check_proxy, (self.list_part[i], ))
+        pool.close()
+        pool.join()
+        endTime = time.time()
+        print("验证代理完成，用时： %.2f s " % (endTime - startTime))
 
-    def choose_proxy(self,reuse,filename):
-        if reuse:
-            with open(filename, 'r') as file:
-                file_content = file.readlines()
-                file_list = [i.rstrip("\n") for i in file_content]
-            return random.choice(file_list)
-        else :
-            return random.choice(self.good_proxy)
+    def check_proxy(self,list_part):
+        for proxy in list_part:
+            check.ProxyTask(proxy,self.filename).start()
+
+
+    def choose_proxy(self,filename):
+        with open(filename, 'r') as file:
+            file_content = file.readlines()
+            file_list = [i.rstrip("\n") for i in file_content]
+        return file_list
 
     def get_agent(self):
         USER_AGENT_LIST = [
