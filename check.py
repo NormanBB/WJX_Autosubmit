@@ -16,7 +16,7 @@ class ProxyTask(Thread):
     def run(self):
         url = 'https://httpbin.org/post'
         try:
-            r1 = requests.post(url=url, proxies={"https": self._proxy}, verify=False, timeout=10)
+            r1 = requests.post(url=url, proxies={"https": f"https://{self._proxy}"}, verify=False, timeout=10)
             if r1.status_code==200:
                 with open(self._filename[0:10] + '_temp.list', 'a+') as f:
                     f.write('{0}\n'.format(format(self._proxy)))
