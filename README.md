@@ -1,4 +1,4 @@
-[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/NormanBB/WJX_Autosubmit)
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/NormanBB/WJX_Autosubmit) ![Gitpod ready-to-code](http://img.shields.io/badge/Python-3.8.7-blue?logo=python)
 
 # WJX_Autosubmit
 
