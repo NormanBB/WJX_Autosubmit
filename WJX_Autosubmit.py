@@ -138,7 +138,7 @@ def Auto_WjX(ip_list):
     # 发送请求
     try:
         r = requests.post(url=url, headers=headers, data=data, params=FormData, proxies={
-                          "https":ip}, verify=False, timeout=10)
+                          "https":f"https://{ip}"}, verify=False, timeout=10)
         #通过测试返回数据中表示成功与否的关键数据（’10‘or '22s'）在开头,所以只需要提取返回数据中前两位元素
         result = r.text[0:2]  
         return result
