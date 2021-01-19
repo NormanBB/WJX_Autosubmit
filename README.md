@@ -1,5 +1,14 @@
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/NormanBB/WJX_Autosubmit) ![Gitpod ready-to-code](http://img.shields.io/badge/Python-3.8.7-blue?logo=python)
 
+# 更新
+
+2021-01-19
+
+又是一年过去，再次打开自己的划水项目。看看问卷星又上了哪些反爬虫机制。目前问卷星部署了阿里云的[人机验证](https://help.aliyun.com/document_detail/28310.html?)，cookies中新增了一些参数。本人才疏学浅，且懒，导致无法继续。在此留下一些参考项目已供后者参考。
+
+- [项目本体的面向对象写法](https://gitee.com/super401/python_scraping/blob/master/%E9%97%AE%E5%8D%B7%E6%98%9F/wjx.py)
+- [使用pyautogui对按钮位置进行定位](https://blog.csdn.net/hongmaodaxia/article/details/104833432) 
+
 # WJX_Autosubmit
 
 问卷星自动提交，Python3版本，2020年8月仍有效。采用构建随机答案，不支持验证码。
@@ -79,4 +88,4 @@
 - 匹配问卷星新headers。
 - 自定义模块使用面向对象方法
 
-~~年更，逃~~
+#### 已弃坑
